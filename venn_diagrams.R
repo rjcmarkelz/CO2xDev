@@ -2,7 +2,8 @@ library(VennDiagram)
 install.packages(pkgs="Vennerable",repos="http://r-forge.r-project.org/")
 install.packages(c("graph", "RBGL"), dependencies=TRUE)
 library(Vennerable)
-setwd("/Users/Cody/Documents/Experiments/CO2xLeaf/Paper/New Phyt Submission/CO2xDevgitrepo")
+#setwd("/Users/Cody/Documents/Experiments/CO2xLeaf/Paper/New Phyt Submission/CO2xDevgitrepo")
+setwd("/Users/Cody_2/git.repos/CO2xDev/")
 
 primordia <- read.table("mapman_co2_primordia_diff_only.txt", header = TRUE)
 expanding <- read.table("mapman_co2_expanding_diff_only.txt", header = TRUE)
@@ -124,6 +125,8 @@ venn.plot <- draw.triple.venn(area1    = 162,
                               n23      = 434,
                               n13      = 75,
                               n123     = 21,
+                              euler.d  = TRUE,
+                              scaled   = TRUE,
                               category = c("Primordia", "Expanding", "Mature"),
                               cat.pos  = c(-30, 30, 250),
                               cat.dist = c(0.05, 0.05, 0.05),
@@ -133,11 +136,18 @@ venn.plot <- draw.triple.venn(area1    = 162,
                               cex      = 2,
                               cat.cex  = 2,
                               cat.col  = c("blue", "red", "green"))
+                             
 grid.draw(venn.plot)
 
 
+##############
+#Vennerable
+##############
 
 
+#test
+venn.plot2 <- Venn(SetNames= c("Primordia","          Expanding","Mature"), Weight=c(0,68,401,19,896,54,413,21))
+plot(venn.plot2)
 
 
 
