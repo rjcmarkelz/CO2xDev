@@ -98,6 +98,7 @@ write.table(pri_exp_mat,file="pri_exp_mat_data.txt",sep="\t", quote = FALSE,
 ########################
 
 #########
+#Now not necessary, completed above 
 #Merge and output for MAPMAN
 #########
 # cat(pri_exp,file="outfiletest.txt",sep="\n")
