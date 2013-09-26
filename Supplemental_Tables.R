@@ -3,8 +3,6 @@ setwd("/Users/Cody/Documents/Experiments/CO2xLeaf/Paper/New Phyt Submission/CO2x
 data <- read.table("co2_dev_7clusters_scaled_refined.csv", header = TRUE, sep = ',')
 data2 <- read.table("fulldataset_developmental_comparisons_refined.csv", header = TRUE, sep = ',')
 data3 <- read.table("Copy of Ath_AFFY_ATH1_TAIR9_Jan2010_adbl_refined.csv", header = TRUE, sep = ',')
-library(data.table)
-library(plyr)
 
 head(data)
 length(data)
@@ -24,9 +22,6 @@ merged2 <- merge(x = merged, y = data3, by="Probe_Set_ID", all.x=TRUE)
 head(merged2)
 dim(merged2)
 tail(merged2)
-colnames(merged2)
-write.table(merged2, "/Users/Cody/Documents/Experiments/CO2xLeaf
-	/Paper/New Phyt Submission/CO2xDevgitrepo/merged2.txt", sep="\t")
 
 co2_sig <- subset(data, PrF_T3_co2 < 0.05)
 dim(co2_sig)
