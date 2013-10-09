@@ -1,7 +1,9 @@
 CO2xDev notes
 
 Andrew asked to see some new tables for which I was sloppy on the JMP laptop in keeping everything tidy. 
-
 I have a new data file that I THINK includes all of the data that I want.
+The problem comes from the Kmeans clustering. It converts all of the LSMEAN values into numbers that do not make sense outside of the LSMEANS context. I found a file dated Sept 20 2012 that has all of the REAL lsmeans and the linear ones..prior to KMEANS clustering.
 
 /Users/Cody/Documents/Experiments/CO2xLeaf/Microarray/JMP/CO2xDEV/Sept Anaysis/Output FDR/fulldataset_developmental_comparisons.txt
+
+I made a copy of this file and put it in the development repository.

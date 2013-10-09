@@ -1,6 +1,9 @@
 library(VennDiagram)
-install.packages(pkgs="Vennerable",repos="http://r-forge.r-project.org/")
-install.packages(c("graph", "RBGL"), dependencies=TRUE)
+
+# following ###http://matticklab.com/index.php?title=Weighted_Venn_diagrams_in_R
+setRepositories() #choose all
+install.packages(pkgs="Vennerable",repos="http://r-forge.r-project.org/",type="source", dependencies=TRUE)
+install.packages(c("graph", "RBGL", "gtools"), dependencies=TRUE) #older packages in older repositories
 library(Vennerable)
 setwd("/Users/Cody/Documents/Experiments/CO2xLeaf/Paper/New Phyt Submission/CO2xDevgitrepo")
 setwd("/Users/Cody_2/git.repos/CO2xDev/")
@@ -124,15 +127,29 @@ venn.plot <- draw.triple.venn(area1    = 356,
 grid.draw(venn.plot)
 
 
+356-99-120-34
+#103
+
+1359-99-541-34
+#685
+
+1908-541-120-34
+#1213
+
 ##############
 #Vennerable
 ##############
 
-
-#test
-venn.plot2 <- Venn(SetNames= c("Primordia","Expanding","Mature"), Weight=c(0,68,401,19,896,54,413,21))
+#test### extra lines to offset where expanding is positioned on the figure.
+venn.plot2 <- Venn(SetNames= c("Primordia","                    Expanding","Mature"), Weight=c(0,103,685,99,1213,120,541,34))
 plot(venn.plot2)
 
+
+
+###Just CO2 sig genes#test### extra lines to offset where expanding is positioned on the figure.
+# venn.plot2 <- Venn(SetNames= c("Primordia","                    Expanding","Mature"), Weight=c(0,68,401,19,896,54,413,21))
+# plot(venn.plot2)
+# 
 
 
 
