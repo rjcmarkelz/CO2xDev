@@ -127,28 +127,26 @@ dodge  <- position_dodge(width=0.95)
 plotfructose2 <- ggplot(data = fructose2_lsmeans_1, aes(fill=CO2, y=lsmean, x=Dev, grid.fill="white"))
 plotfructose2 <- plotfructose2 + geom_bar(position=dodge, stat="identity") 
 plotfructose2 <- plotfructose2 + geom_errorbar(limits, position = dodge, width = 0.25, colour='darkgrey') 
-plotfructose2 <- plotfructose2 + xlab("Development") 
 plotfructose2 <- plotfructose2 + ggtitle("") + theme_bw() + scale_fill_manual(values = c("370" = "grey", "750" = "black"))
-plotfructose2 <- plotfructose2 + theme(panel.grid = element_blank(), legend.position = "none") + geom_abline(intercept=0, slope= 0, colour= "grey")
+plotfructose2 <- plotfructose2 + geom_abline(intercept=0, slope= 0, colour= "grey") + xlab("") 
 plotfructose2 <- plotfructose2 + scale_y_continuous (name = expression(paste('Fructose (mmol', ' m'^{-2},')' )))
-plotfructose2
-
-#need to finish this plot by making axis labels larger etc.
-limits <- aes(ymax= lsmean + SE, ymin = lsmean - SE)
-dodge  <- position_dodge(width=0.95)
-plotfructose2 <- ggplot(data = fructose2_lsmeans_1, aes(fill=CO2, y=lsmean, x=Dev, grid.fill="white"))
-plotfructose2 <- plotfructose2 + geom_bar(position=dodge, stat="identity") 
-plotfructose2 <- plotfructose2 + geom_errorbar(limits, position = dodge, width = 0.25, colour='darkgrey') 
-plotfructose2 <- plotfructose2 + xlab("Development") 
-plotfructose2 <- plotfructose2 + ggtitle("") + theme_bw() + scale_fill_manual(values = c("370" = "grey", "750" = "black"))
-plotfructose2 <- plotfructose2 + theme(panel.grid = element_blank(), legend.position = "none") + geom_abline(intercept=0, slope= 0, colour= "grey")
-plotfructose2 <- plotfructose2 + scale_y_continuous (name = expression(paste('Fructose (mmol', ' m'^{-2},')' )))
+plotfructose2 <- plotfructose2 +  theme(panel.grid = element_blank(), legend.position = "none", 
+									axis.text.x = element_text(colour="black",size=20,angle=0,hjust=.5,vjust=.5,face="bold"),
+        							axis.text.y = element_text(colour="black",size=12,angle=0,hjust=1,vjust=0,face="bold"),  
+        							axis.title.x = element_text(colour="black",size=12,angle=0,hjust=.5,vjust=0,face="bold"),
+        							axis.title.y = element_text(colour="black",size=20,angle=90,hjust=.5,vjust=.5,face="bold"))
 plotfructose2
 
 #need to make the same plot for mass based measurements
 str(GFSdata)
 fructose_glm <- lm(fruc_g ~ CO2 + Dev + CO2:Dev, data = GFSdata)
 summary(fructose_glm)
+
+ # CO2 Dev      lsmean          SE df     lower.CL   upper.CL
+ # 370  23 0.037295499 0.008224524  9  0.018690333 0.05590066
+ # 750  23 0.025477841 0.008224524  9  0.006872675 0.04408301
+ # 370  30 0.003166738 0.007122647  9 -0.012945809 0.01927928
+ # 750  30 0.001690776 0.008224524  9 -0.016914390 0.02029594
 
 fructose_glm_lsmeans <- lsmeans(fructose_glm, pairwise ~ CO2|Dev)
 fructose_glm_lsmeans_1 <- fructose_glm_lsmeans[[1]]
