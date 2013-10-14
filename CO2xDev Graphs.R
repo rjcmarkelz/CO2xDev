@@ -1,3 +1,5 @@
+setwd("/Users/Cody/Documents/Experiments/CO2xLeaf/Paper/New Phyt Submission/CO2xDevgitrepo")
+
 CO2xDev <- data.frame(
 
 co2conc=factor(c(370, 370, 750, 750)),
@@ -38,6 +40,7 @@ starch_conc_se_aug= c(0, 0.043, 0, 0.043)
 
 )
 
+
 CO2xDev  #check data frame
 
 library(ggplot2)   			#load the ggplot2 library 
@@ -47,10 +50,6 @@ theme_rect(fill = "white", colour = NA)
  theme_set(th)
  
 #2013_10_08 Need to show andrew that fructose is messed up
-
-
-
-
 
 fructoselimits <- aes(ymax = fructose_mean_aug + fructose_se_aug, ymin=fructose_mean_aug - fructose_se_aug)                  #set limits
 fructoseplot <- ggplot(CO2xDev, aes(y=fructose_mean_aug, x=Dev, fill=co2conc, grid.fill="white")) +     #make a new plot in ggplot
@@ -82,20 +81,78 @@ dodge  <- position_dodge(width=0.95)
 plotfructose <- ggplot(data = CO2xDev, aes(fill=co2conc, y=fructose_mean_aug, x=Dev))
 plotfructose <- plotfructose + geom_bar(position=dodge, stat="identity") 
 plotfructose <- plotfructose + geom_errorbar(fructoselimits, position = dodge, width = 0.25) 
-plotfructose <- plotfructose + xlab("Nitrogen") + ylab("Fructose")
+plotfructose <- plotfructose + xlab("Development") + ylab("Fructose")
 plotfructose <- plotfructose + ggtitle("Fructose")
 plotfructose
 
 
+GFSdata <- read.table("CO2xDev_GFSSP_SAS.csv", header = TRUE, sep = ',', na.strings = ".")
+head(GFSdata)
+GFSdata$fructose_mmol_m2 <- sub("0.00000000", "NA", GFSdata$fructose_mmol_m2)
+GFSdata[GFSdata == 0] <- NA
 
+library
+plot(GFSdata$fructose_mmol_m2|GFSdata$Dev)
 
+GFSdata$fructose_mmol_m2
+write.table(GFSdata, "/Users/Cody/Documents/Experiments/CO2xLeaf/Paper/New Phyt Submission/CO2xDevgitrepo/GFS_cleaned.txt", sep="\t", row.names=FALSE)
 
+GFSdata <- read.table("GFS_cleaned.txt", header = TRUE, sep = '\t', na.strings = "NA")
+str(GFSdata)
+GFSdata$rep <- as.factor(GFSdata$rep)
+GFSdata$CO2 <- as.factor(GFSdata$CO2)
+GFSdata$Dev <- as.factor(GFSdata$Dev)
 
+GFSdata$fructose_mmol_m2 <- as.numeric(GFSdata$fructose_mmol_m2)
 
+GFSdata <- na.omit(GFSdata)
+GFSdata
+str(GFSdata)
 
+fructose2lm <- lm(fructose_mmol_m2 ~ CO2 + Dev + CO2:Dev, data = GFSdata)
+summary(fructose2lm)
+# (Intercept)                0.7579     0.1675   4.524  0.00144 **
+# CO2750                    -0.2165     0.2369  -0.914  0.38453   
+# DevFully_expanded         -0.6867     0.2216  -3.099  0.01275 * 
+# CO2750:DevFully_expanded   0.1875     0.3244   0.578  0.57739 
 
+library(lsmeans)
+library(ggplot2)
+fructose2_lsmeans <- lsmeans(fructose2lm, pairwise ~ CO2|Dev)
+fructose2_lsmeans_1 <- fructose2_lsmeans[[1]]
+fructose2_lsmeans_1
 
+limits <- aes(ymax= lsmean + SE, ymin = lsmean - SE)
+dodge  <- position_dodge(width=0.95)
+plotfructose2 <- ggplot(data = fructose2_lsmeans_1, aes(fill=CO2, y=lsmean, x=Dev, grid.fill="white"))
+plotfructose2 <- plotfructose2 + geom_bar(position=dodge, stat="identity") 
+plotfructose2 <- plotfructose2 + geom_errorbar(limits, position = dodge, width = 0.25, colour='darkgrey') 
+plotfructose2 <- plotfructose2 + xlab("Development") 
+plotfructose2 <- plotfructose2 + ggtitle("") + theme_bw() + scale_fill_manual(values = c("370" = "grey", "750" = "black"))
+plotfructose2 <- plotfructose2 + theme(panel.grid = element_blank(), legend.position = "none") + geom_abline(intercept=0, slope= 0, colour= "grey")
+plotfructose2 <- plotfructose2 + scale_y_continuous (name = expression(paste('Fructose (mmol', ' m'^{-2},')' )))
+plotfructose2
 
+#need to finish this plot by making axis labels larger etc.
+limits <- aes(ymax= lsmean + SE, ymin = lsmean - SE)
+dodge  <- position_dodge(width=0.95)
+plotfructose2 <- ggplot(data = fructose2_lsmeans_1, aes(fill=CO2, y=lsmean, x=Dev, grid.fill="white"))
+plotfructose2 <- plotfructose2 + geom_bar(position=dodge, stat="identity") 
+plotfructose2 <- plotfructose2 + geom_errorbar(limits, position = dodge, width = 0.25, colour='darkgrey') 
+plotfructose2 <- plotfructose2 + xlab("Development") 
+plotfructose2 <- plotfructose2 + ggtitle("") + theme_bw() + scale_fill_manual(values = c("370" = "grey", "750" = "black"))
+plotfructose2 <- plotfructose2 + theme(panel.grid = element_blank(), legend.position = "none") + geom_abline(intercept=0, slope= 0, colour= "grey")
+plotfructose2 <- plotfructose2 + scale_y_continuous (name = expression(paste('Fructose (mmol', ' m'^{-2},')' )))
+plotfructose2
+
+#need to make the same plot for mass based measurements
+str(GFSdata)
+fructose_glm <- lm(fruc_g ~ CO2 + Dev + CO2:Dev, data = GFSdata)
+summary(fructose_glm)
+
+fructose_glm_lsmeans <- lsmeans(fructose_glm, pairwise ~ CO2|Dev)
+fructose_glm_lsmeans_1 <- fructose_glm_lsmeans[[1]]
+fructose_glm_lsmeans_1
 
 
 
@@ -232,7 +289,7 @@ sucroseconc_plot   #view plot
 fructoselimits <- aes(ymax = fructose_mean_aug + fructose_se_aug, ymin=fructose_mean_aug - fructose_se_aug)                  #set limits
 fructoseplot <- ggplot(CO2xDev, aes(y=fructose_mean_aug, x=Dev, fill=co2conc, grid.fill="white")) +     #make a new plot in ggplot
 		scale_x_discrete(name = 'Days After Germination', breaks=c('1', '6'), labels=c("23", "30")) +
-		scale_y_continuous( limits = c(-0.5, 0.5), name = expression(paste('fructose (mmol', ' m'^{-2},')' )))  +
+		scale_y_continuous( limits = c(-0.5, 0.5), name = expression(paste('Fructose (mmol', ' m'^{-2},')' )))  +
 		opts(title= '', 
 			pplot.title = theme_text(face='bold', size =14, hjust=.55),      #plot title size font etc.
 			axis.title.x = theme_text(face='bold', size=20, hjust=.55),     #x-axis title
